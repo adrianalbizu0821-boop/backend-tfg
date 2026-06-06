@@ -30,4 +30,15 @@ public class NotifyController {
 
         return ResponseEntity.ok(response);
     }
+    @PostMapping
+    public ResponseEntity<String> sendToAll(
+            @RequestBody NotificationRequest request) {
+
+        fcmService.sendToAll(
+                request.getTitle(),
+                request.getBody());
+
+        return ResponseEntity.ok(
+                "Notificaciones enviadas");
+    }
 }
