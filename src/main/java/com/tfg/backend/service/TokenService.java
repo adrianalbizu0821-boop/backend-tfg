@@ -4,8 +4,9 @@ import com.tfg.backend.dto.RegisterTokenRequest;
 import com.tfg.backend.entity.DeviceToken;
 import com.tfg.backend.repository.TokenRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class TokenService {
@@ -30,5 +31,12 @@ public class TokenService {
 
                     return tokenRepository.save(token);
                 });
+    }
+    public List<DeviceToken> getAllTokens() {
+        return tokenRepository.findAll();
+    }
+    @Transactional
+    public void deleteToken(String token) {
+        tokenRepository.deleteByToken(token);
     }
 }

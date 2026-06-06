@@ -10,4 +10,5 @@ public interface TokenRepository
 
     Optional<DeviceToken> findByToken(String token);
 
+    void deleteByToken(String token);
 }
