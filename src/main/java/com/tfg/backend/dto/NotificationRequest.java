@@ -4,6 +4,7 @@ public class NotificationRequest {
 
     private String title;
     private String body;
+    private String newsId;
 
     public NotificationRequest() {
     }
@@ -22,5 +23,13 @@ public class NotificationRequest {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getNewsId() {
+        return newsId;
+    }
+
+    public void setNewsId(String newsId) {
+        this.newsId = newsId;
     }
 }

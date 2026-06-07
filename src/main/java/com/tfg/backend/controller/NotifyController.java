@@ -26,7 +26,8 @@ public class NotifyController {
                 fcmService.sendToToken(
                         token,
                         request.getTitle(),
-                        request.getBody());
+                        request.getBody(),
+                        request.getNewsId());
 
         return ResponseEntity.ok(response);
     }
@@ -36,7 +37,8 @@ public class NotifyController {
 
         fcmService.sendToAll(
                 request.getTitle(),
-                request.getBody());
+                request.getBody(),
+                request.getNewsId());
 
         return ResponseEntity.ok(
                 "Notificaciones enviadas");

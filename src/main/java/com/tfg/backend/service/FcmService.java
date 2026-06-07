@@ -6,6 +6,8 @@ import com.google.firebase.messaging.Notification;
 import com.tfg.backend.entity.DeviceToken;
 import com.tfg.backend.repository.TokenRepository;
 import org.springframework.stereotype.Service;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.MessagingErrorCode;
 
 import java.util.List;
 
@@ -21,7 +23,8 @@ public class FcmService {
     public String sendToToken(
             String token,
             String title,
-            String body) throws Exception {
+            String body,
+            String newsId) throws Exception {
 
         Message message = Message.builder()
                 .setToken(token)
@@ -31,6 +34,7 @@ public class FcmService {
                                 .setBody(body)
                                 .build()
                 )
+                .putData("newsId", newsId)
                 .build();
 
         return FirebaseMessaging.getInstance()
@@ -39,7 +43,8 @@ public class FcmService {
 
     public void sendToAll(
             String title,
-            String body) {
+            String body,
+            String newsId) {
 
         List<DeviceToken> tokens =
                 tokenRepository.findAll();
@@ -56,17 +61,33 @@ public class FcmService {
                                         .setBody(body)
                                         .build()
                         )
+                        .putData("newsId", newsId)
                         .build();
 
                 FirebaseMessaging.getInstance()
                         .send(message);
 
-            } catch (Exception e) {
+            } catch (FirebaseMessagingException e) {
 
                 System.out.println(
                         "Error enviando a token: "
                                 + deviceToken.getToken());
 
+                if (e.getMessagingErrorCode()
+                        == MessagingErrorCode.UNREGISTERED) {
+
+                    System.out.println(
+                            "Token inválido eliminado: "
+                                    + deviceToken.getToken());
+
+                    tokenRepository.delete(deviceToken);
+                }
+
+                e.printStackTrace();
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
             }
         }
     }
